@@ -1,17 +1,17 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/oddstream/oddstream.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ![Oddstream Logo](/oddstream logo.png)
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Privacy policy
 
-### Jekyll Themes
+We do not collect or store your personal information, via this website or any of the games.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/oddstream/oddstream.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+We use Google Analytics software to collect information about how you use this website.
 
-### Support or Contact
+Google Analytics stores information about:
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+- the pages you visit;
+- how long you spend on each page;
+- how you got to the site;
+- what you click on while you’re visiting the site.
+
+We do not collect or store your personal information through Google Analytics (for example your name or address) so this information cannot be used to identify who you are.
