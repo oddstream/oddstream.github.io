@@ -1,0 +1,129 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css?family=Acme') screen;
+
+body {
+  overflow: auto;
+}
+
+svg { 
+  background-color: var(--bg-color, darkgreen);   /* cascades to children */
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
+  /*touch-action: none;*/
+  position: static;
+}
+
+/*
+  Basically, if you switch to pointer events you will be able to prevent pointercancel by simply using the touch-action CSS property with a value of none, 
+  as long as the browser has both features correctly implemented. (Android 5+, Chrome 55+, IE11, Edge, etc)
+*/
+.spielkarte {
+  fill:white;
+  stroke-width: 1;
+  stroke:silver;
+  pointer-events: fill;
+  touch-action: none;
+}
+
+.spielkarteback {
+  fill:steelblue;
+  stroke-width: 1;
+  stroke:silver;
+  pointer-events: fill;
+  touch-action: none;
+}
+
+.grabbed {
+  /* stroke-width: 2 !important; */
+  filter: url("#dropshadow");
+}
+
+.focus {
+  stroke-width: 2 !important;
+  stroke: black !important;
+}
+
+.unmoveable {
+  fill:rgb(233,240,233) !important;
+}
+
+.spielkartevalue {
+  font-family: 'Acme', sans-serif;
+  font-size: 28px;
+  /* fill here gets overwritten */
+  pointer-events: none;
+  touch-action: none;
+}
+
+.spielkartesuit {
+  font-family: 'Acme', sans-serif;
+  font-size: 32px;
+  /* fill here gets overwritten */
+  pointer-events: none;
+  touch-action: none;
+}
+
+.Reserve, .ReserveFrog, .Stock, .StockAgnes, .StockCruel, .StockFan, .StockGolf, .StockKlondike, .StockScorpion, .StockSpider, .Waste {
+  fill: var(--bg-color, darkgreen);
+  stroke: none;
+}
+
+.Cell, .CellCarpet {
+  fill: var(--bg-color, darkgreen);
+  stroke: white;
+  stroke-width: 1;
+}
+
+.Tableau, .TableauBlockade, .TableauCanfield, .TableauFortunesFavor, .TableauFreecell, .TableauGolf, .TableauSpider, .TableauTail {
+  fill: var(--bg-color, darkgreen);
+  stroke: var(--hi-color, lightgreen);
+  stroke-width: 1;
+}
+
+.Foundation, .FoundationCanfield, .FoundationOsmosis, .FoundationPenguin, .FoundationSpider {
+  fill: var(--bg-color, darkgreen);
+  stroke: var(--hi-color, lightgreen);
+  stroke-width: 1;
+}
+
+.accepts {
+  font-family: 'Acme', sans-serif;
+  font-size: 24px;
+  stroke: none;
+  fill: var(--hi-color, lightgreen);
+}
+
+.stockredeals {
+  font-family: 'Acme', sans-serif;
+  /* font-family: 'Ariel', sans-serif; */
+  font-size: 48px;
+  stroke: none;
+  fill: var(--hi-color, lightgreen);
+}
+/*
+.stocknoredeals {
+  font-family: 'Ariel', sans-serif;
+  font-size: 48px;
+  stroke: none;
+  fill: red;
+}
+*/
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.steelblue {
+  background-color: #4682b4 !important;
+}
