@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123485292-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-123485292-1');
+    </script>
+
+    <title>Oddstream Solitaire</title>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Free Solitaire Game"/>
+    <meta name="keywords" content="Solitaire, Patience, Klondike, Freecell, Yukon, Spider, Scorpion, Canfield"/>
+    <meta name="author" content="Gilbert Oddstream"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="mask-icon" href="img/safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen"/>
+    <!-- <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"/> -->
+    <link type="text/css" rel="stylesheet" href="Solitaire.css" media="screen"/>
+    </head>
+    
+    <body>
+
+    <nav>
+    <div class="nav-wrapper white-text grey darken-4">
+    <div class="row">
+    <div class="col s12">
+    <ul class="left">
+        <li data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></li>
+    </ul>
+    <a id="nav-title" class="brand-logo hide-on-small-only"></a>
+    <ul class="right">
+        <li><a onclick="undoer.undo()"><i class="material-icons tooltipped noselect" data-position="bottom" data-tooltip="Undo">undo</i></a></li>
+        <li><a id="moveCounter" onclick="doshowavailablemoves()" class="tooltipped noselect" data-position="bottom" data-tooltip="Moves"></a></li>
+        <li><a onclick="doshowrules()"><i class="material-icons tooltipped noselect" data-position="bottom" data-tooltip="Rules">assignment</i></a></li>
+        <li><a href="faq.html" target="_blank" rel="noopener" class="tooltipped noselect" data-position="bottom" data-tooltip="FAQ"><i class="material-icons">info</i></a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </nav>
+
+    <ul id="slide-out" class="sidenav">
+    <li><div id="sidenav-header" class="user-view white-text grey darken-4">
+      <h4 id="sidenav-title">&nbsp;</h4>
+      <p id="sidenav-info">&nbsp;</p>
+    </div></li>
+    <li><a class="waves-effect sidenav-close" onclick="areYouSure('dostar')"><i class="material-icons">star</i>New deal</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="dostarseed()"><i class="material-icons">star_border</i>Specify deal...</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="areYouSure('doreplay')"><i class="material-icons">replay</i>Replay this deal</a></li>
+    <li><a class="waves-effect sidenav-close" href="index.html"><i class="material-icons">apps</i>Find new game</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="waves-effect sidenav-close" onclick="dosave()"><i class="material-icons">save</i>Save this position</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="doload()"><i class="material-icons">restore</i>Load last saved position</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="waves-effect modal-trigger sidenav-close" href="#modalStatistics"><i class="material-icons">assessment</i>Statistics...</a></li>
+    <li><a class="waves-effect modal-trigger sidenav-close" href="#modalSettings"><i class="material-icons">settings</i>Settings...</a></li>
+    <li><a class="waves-effect modal-trigger sidenav-close" href="faq.html"><i class="material-icons">help</i>Help</a></li>
+    </ul>
+<script type="application/json" id="rules">
+{
+  "Name":"Squadron",
+  "Winnable":[119449,202441],
+  "Wikipedia":"https://en.wikipedia.org/wiki/Forty_Thieves_(card_game)",
+  "Stock":{"packs":2, "redeals":0},
+  "Foundation":{"suit":2, "rank":1, "accept":1},
+  "Tableau":{"build":{"suit":2, "rank":2}, "move":{"suit":2, "rank":2 }}
+}
+</script>
+
+<svg id="baize" xmlns="http://www.w3.org/2000/svg">
+    <g class="StockKlondike">
+      <rect x="10" y="10"></rect>
+    </g>
+    <g class="Waste"><rect x="77" y="10"></rect></g>
+
+    <g class="Foundation"><rect x="211" y="10"></rect></g>
+    <g class="Foundation"><rect x="278" y="10"></rect></g>
+    <g class="Foundation"><rect x="345" y="10"></rect></g>
+    <g class="Foundation"><rect x="412" y="10"></rect></g>
+    <g class="Foundation"><rect x="479" y="10"></rect></g>
+    <g class="Foundation"><rect x="546" y="10"></rect></g>
+    <g class="Foundation"><rect x="613" y="10"></rect></g>
+    <g class="Foundation"><rect x="680" y="10"></rect></g>
+
+    <g class="Tableau" deal="uuuu"><rect x="77" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="144" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="211" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="278" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="345" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="412" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="479" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="546" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="613" y="110"></rect></g>
+    <g class="Tableau" deal="uuuu"><rect x="680" y="110"></rect></g>
+
+    <g class="Cell" deal="u"><rect x="546" y="510"></rect></g>    
+    <g class="Cell" deal="u"><rect x="613" y="510"></rect></g>
+    <g class="Cell" deal="u"><rect x="680" y="510"></rect></g>
+        <defs>
+        <filter id="white-glow" x="-5000%" y="-5000%" width="10000%" height="10000%">
+          <feFlood result="flood" flood-color="#ffffff" flood-opacity="1"></feFlood>
+          <feComposite in="flood" result="mask" in2="SourceGraphic" operator="in"></feComposite>
+          <feMorphology in="mask" result="dilated" operator="dilate" radius="2"></feMorphology>
+          <feGaussianBlur in="dilated" result="blurred" stdDeviation="5"></feGaussianBlur>
+          <feMerge>
+              <feMergeNode in="blurred"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
+        <filter id="dropshadow" width="130%" height="130%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0"/> 
+            <feOffset dx="6" dy="6" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.2"/>
+            </feComponentTransfer>
+            <feMerge> 
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/> 
+            </feMerge>
+        </filter>
+    </defs>
+
+  <symbol id="♥" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="M0 -300C0 -400 100 -500 200 -500C300 -500 400 -400 400 -250C400 0 0 400 0 500C0 400 -400 0 -400 -250C-400 -400 -300 -500 -200 -500C-100 -500 0 -400 -0 -300Z" fill="red"></path>
+  </symbol>
+  <symbol id="♦" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="M-400 0C-350 0 0 -450 0 -500C0 -450 350 0 400 0C350 0 0 450 0 500C0 450 -350 0 -400 0Z" fill="red"></path>
+  </symbol>
+  <symbol id="♣" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="M30 150C35 385 85 400 130 500L-130 500C-85 400 -35 385 -30 150A10 10 0 0 0 -50 150A210 210 0 1 1 -124 -51A10 10 0 0 0 -110 -65A230 230 0 1 1 110 -65A10 10 0 0 0 124 -51A210 210 0 1 1 50 150A10 10 0 0 0 30 150Z" fill="black"></path>
+  </symbol>
+  <symbol id="♠" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="M0 -500C100 -250 355 -100 355 185A150 150 0 0 1 55 185A10 10 0 0 0 35 185C35 385 85 400 130 500L-130 500C-85 400 -35 385 -35 185A10 10 0 0 0 -55 185A150 150 0 0 1 -355 185C-355 -100 -100 -250 0 -500Z" fill="black"></path>
+  </symbol>
+
+<!--
+  <symbol id="♥" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="
+    M0 500
+    L-400 -300
+    L400 -300
+    Z"></path>
+  </symbol>
+  <symbol id="♦" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="
+    M -400 0
+    L 0 -500
+    L 400 0
+    L 0 500
+    Z"/>
+  </symbol>
+  <symbol id="♣" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <circle cx="-300" cy="150" r="200"/>
+    <circle cx="300" cy="150" r="200"/>
+    <circle cx="0" cy="-300" r="200"/>
+  </symbol>
+  <symbol id="♠" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="
+    M0 -500
+    L-400 400
+    L400 400
+    Z"></path>
+  </symbol>
+-->
+  <symbol id="★" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <path d="
+    M 0 -433
+    L -100 -100
+    L -433 -100
+    L -150 66
+    L -250 400
+    L 0 200
+    L 250 400
+    L 150 66
+    L 433 -100
+    L 100 -100Z"/>
+  </symbol>
+  <symbol id="●" viewBox="-600 -600 1200 1200" preserveAspectRatio="xMinYMid">
+    <circle cx="0" cy="0" r="350"/>
+  </symbol>
+</svg>
+<div id="modalSettings" class="modal">
+    <div class="modal-content">
+        <h4 class="noselect">Settings<a class="modal-close right noselect hide-on-small-only"><i class="material-icons">close</i></a></h4>
+
+        <p class="range-field">
+            <label for="aniSpeed"><input type="range" id="aniSpeed" min="1" max="5"/><span>Animation speed</span></label>
+        </p>
+        
+        <p><label for="sensoryCues"><input type="checkbox" id="sensoryCues" class="filled-in steelblue"/><span>Highlight movable cards</span></label></p>
+        <p><label for="autoPlay"><input type="checkbox" id="autoPlay" class="filled-in steelblue"/><span>Allow single click to move a card</span></label></p>
+<!--
+        <p><label for="autoFlip"><input type="checkbox" id="autoFlip" class="filled-in steelblue"/><span>Automatically turn over exposed tableau cards</span></label></p>
+        <p><label for="playFromFoundation"><input type="checkbox" id="playFromFoundation" class="filled-in steelblue"/><span>Allow play from foundation<span></label></p>
+-->       
+        <div class="row">
+        <div class="col s6">
+        <p><label for="autoOff"><input type="radio" id="autoOff" name="auto" value="off"/><span>No auto collect</span></label></p>
+        <p><label for="autoSolve"><input type="radio" id="autoSolve" name="auto" value="solve"/><span>Auto collect when solveable</span></label></p>
+<!--        
+        <p><label for="autoAces"><input type="radio" id="autoAces" name="auto" value="aces"/><span>Auto collect aces</span></label></p>
+-->        
+        <p><label for="autoAny"><input type="radio" id="autoAny" name="auto" value="any"/><span>Auto collect any card</span></label></p>
+        </div>
+        </div>
+    </div>
+    <!--
+    <div class="modal-footer">
+      <a class="modal-close btn-small steelblue noselect">CLOSE</a>
+    </div>
+    -->
+</div>
+
+<div id="modalStarSeed" class="modal">
+    <div class="modal-content">
+        <p>
+            <input id="starSeed" type="number" autofocus="true" min="0" max="999999" placeholder="Deal number (1-999999)">
+        </p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn-small steelblue noselect" onclick="dostarseeddeal()">Deal</a>
+      <a class="modal-close btn-small steelblue noselect" ">Cancel</a>
+    </div>
+</div>
+
+<div id="modalStatistics" class="modal">
+    <div class="modal-content">
+      <h4 class="noselect">Statistics<a class="modal-close right noselect hide-on-small-only"><i class="material-icons">close</i></a></h4>
+      <p id="thisGameStats"></p>
+      <p id="gamesPlayedStats"></p>
+      <p id="gamesStreakStats"></p>
+      <p id="gamesTotalStats"></p>
+      <a class="modal-close noselect" onclick="areYouSure('dostatsreset')">reset statistics for this game</a>
+    </div>
+</div>
+  
+<div id="modalGameOver" class="modal">
+    <div class="modal-content">
+      <h4 class="noselect hide-on-small-only">Complete</h4>
+      <p id="movesMade"></p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn-small steelblue" onclick="dostar()"><i class="material-icons">star</i> New deal</a>
+    </div>
+</div>
+
+<div id="modalAreYouSure" class="modal">
+    <div class="modal-content">
+      <h4 class="noselect">Are you sure?</h4>
+    </div>
+    <div class="modal-footer">
+      <a id="modalAreYouSureYes" class="modal-close btn-small steelblue">Yes</a>
+      <a id="modalAreYouSureNo"  class="modal-close btn-small steelblue">No</a>
+    </div>
+</div>
+
+<div id="modalShowRules" class="modal">
+    <div class="modal-content">
+        <h4>Rules<a class="modal-close right noselect hide-on-small-only"><i class="material-icons">close</i></a></h4>
+        <div id="therules"></div>
+        <a id="theruleswikipedia" href="" target="_blank" rel="noopener">Wikipedia</a>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script>
+M.Sidenav.init(document.querySelectorAll('.sidenav'));
+M.Modal.init(document.querySelectorAll('.modal'));
+M.Tooltip.init(document.querySelectorAll('.tooltipped'));
+</script>
+<!-- <script type="text/javascript" src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script> -->
+<script type="text/javascript" src="Solitaire.js"></script>
+
+</body>
+</html>
