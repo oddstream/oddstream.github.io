@@ -4,7 +4,7 @@
 * [100+ Solitaire Variations](https://oddstream.games/Solitaire/index.html)
 * [2048 Clone](https://oddstream.games/Soltz/Soltz.html)
 
-![Google Play Logo)(/google-play-badge.png)
+![Google Play Logo](/google-play-badge.png)
 
 * [PUCK·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.puckmaze)
 * [PUCK·MAZE·HEX](https://play.google.com/store/apps/details?id=com.oddstream.puckmazehex)
