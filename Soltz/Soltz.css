@@ -1,0 +1,121 @@
+/* https://old.reddit.com/r/webdev/comments/c0iqt5/optimising_google_fonts_requests_shave_off_up_to/ */
+@import url('https://fonts.googleapis.com/css?family=Acme');
+
+body {
+  overflow: auto;
+  background-color: var(--bg-color, Moccasin);   /* cascades to children */
+}
+
+svg { 
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
+  /*touch-action: none;*/
+  position: static;
+}
+
+.button {
+  fill: #796F65;
+}
+
+.button:hover {
+  fill: #998F85;
+  cursor: pointer;
+}
+
+.button:active {
+  fill: brown;
+  cursor: pointer;
+}
+
+.buttontext {
+  font-family: var(--ffont), sans-serif;
+  font-size: 36px;
+  fill: white;
+}
+
+.big {
+  font-size: 72px !important;
+}
+
+.spielkarte {
+  stroke-width: 1;
+  stroke:silver;
+  pointer-events: fill;
+  touch-action: none;
+}
+
+.spielkartevalue {
+  font-family: var(--ffont), sans-serif;
+  /* font-size: 36px; */
+  /* fill here gets overwritten */
+  pointer-events: none;
+  touch-action: none;
+}
+
+.score {
+  font-family: var(--ffont), sans-serif;
+  font-size: 48px;
+  fill: brown;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.highscore {
+  font-family: var(--ffont), sans-serif;
+  font-size: 24px;
+  fill: brown;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.place {
+  fill: var(--bg-color, Moccasin);
+  stroke: white;
+  stroke-width: 1;
+}
+
+.grabbed {
+  /* stroke-width: 2 !important; */
+  filter: url("#dropshadow");
+}
+
+.destination {
+  fill: var(--hi-color, PeachPuff) !important;
+  /* filter: url("white-glow"); */
+}
+
+.new {
+  animation-name: appear;
+  animation-duration: 1s;
+  /* animation-fill-mode: backwards; */
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.old {
+  animation-name: disappear;
+  animation-duration: 0.5s;
+  /* animation-fill-mode: backwards; */
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
