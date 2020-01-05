@@ -1,10 +1,10 @@
 
-## Games
+## Online Games
 
 * [100+ Solitaire Variations](https://oddstream.games/Solitaire/index.html)
 * [2048 Clone](https://oddstream.games/Soltz/index.html)
 
-![Google Play Logo](/google-play-badge.png)
+## Google Play Games
 
 * [Solitaire](https://play.google.com/store/apps/details?id=com.oddstream.solitaire)
 
