@@ -6,9 +6,12 @@
 
 ![Google Play Logo](/google-play-badge.png)
 
+* [Solitaire](https://play.google.com/store/apps/details?id=com.oddstream.solitaire)
+
 * [PIXIE·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.PixieMaze)
 * [PUCK·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.puckmaze)
 * [PUCK·MAZE·HEX](https://play.google.com/store/apps/details?id=com.oddstream.puckmazehex)
+
 * [Mycelium Loops](https://play.google.com/store/apps/details?id=com.oddstream.mycelium)
 
 ## Privacy policy
