@@ -44,9 +44,9 @@
     </ul>
     <a id="nav-title" class="brand-logo hide-on-small-only"></a>
     <ul class="right">
-        <li><a onclick="undoer.undo()"><i class="material-icons tooltipped noselect" data-position="bottom" data-tooltip="Undo">undo</i></a></li>
-        <li><a id="moveCounter" onclick="doshowavailablemoves()" class="tooltipped noselect" data-position="bottom" data-tooltip="Moves"></a></li>
-        <li><a onclick="doshowrules()"><i class="material-icons tooltipped noselect" data-position="bottom" data-tooltip="Rules">assignment</i></a></li>
+        <li><a onclick="window.doundo()"><i class="material-icons tooltipped noselect" data-position="bottom" data-tooltip="Undo">undo</i></a></li>
+        <li><a id="moveCounter" onclick="window.doshowavailablemoves()" class="tooltipped noselect" data-position="bottom" data-tooltip="Moves"></a></li>
+        <li><a onclick="window.doshowrules()"><i class="material-icons tooltipped noselect" data-position="bottom" data-tooltip="Rules">assignment</i></a></li>
         <li><a href="faq.html" target="_blank" rel="noopener" class="tooltipped noselect" data-position="bottom" data-tooltip="FAQ"><i class="material-icons">info</i></a></li>
     </ul>
     </div>
@@ -59,13 +59,13 @@
       <h4 id="sidenav-title">&nbsp;</h4>
       <p id="sidenav-info">&nbsp;</p>
     </div></li>
-    <li><a class="waves-effect sidenav-close" onclick="areYouSure('dostar')"><i class="material-icons">star</i>New deal</a></li>
-    <li><a class="waves-effect sidenav-close" onclick="dostarseed()"><i class="material-icons">star_border</i>Specify deal...</a></li>
-    <li><a class="waves-effect sidenav-close" onclick="areYouSure('doreplay')"><i class="material-icons">replay</i>Replay this deal</a></li>
-    <li><a class="waves-effect sidenav-close" href="index.html"><i class="material-icons">apps</i>Find new game</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="window.areYouSure('window.dostar')"><i class="material-icons">star</i>New deal</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="window.dostarseed()"><i class="material-icons">star_border</i>Specify deal...</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="window.areYouSure('window.doreplay')"><i class="material-icons">replay</i>Replay this deal</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="window.dofindnewgame()"><i class="material-icons">apps</i>Find new game</a></li>
     <li><div class="divider"></div></li>
-    <li><a class="waves-effect sidenav-close" onclick="dosave()"><i class="material-icons">save</i>Save this position</a></li>
-    <li><a class="waves-effect sidenav-close" onclick="doload()"><i class="material-icons">restore</i>Load last saved position</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="window.dosaveposition()"><i class="material-icons">save</i>Save this position</a></li>
+    <li><a class="waves-effect sidenav-close" onclick="window.doloadposition()"><i class="material-icons">restore</i>Load last saved position</a></li>
     <li><div class="divider"></div></li>
     <li><a class="waves-effect modal-trigger sidenav-close" href="#modalStatistics"><i class="material-icons">assessment</i>Statistics...</a></li>
     <li><a class="waves-effect modal-trigger sidenav-close" href="#modalSettings"><i class="material-icons">settings</i>Settings...</a></li>
@@ -83,20 +83,20 @@
 </script>
 
 <svg id="baize" xmlns="http://www.w3.org/2000/svg">
-    <g class="Stock"><rect x="10" y="-100"></rect></g>
+    <g class="Stock"><rect x="0" y="-1"></rect></g>
 
-    <g class="TableauTail" deal="u"><rect x="10" y="10"></rect></g>
-    <g class="TableauTail" deal="duuuuu"><rect x="77" y="10"></rect></g>
-    <g class="TableauTail" deal="dduuuuu"><rect x="144" y="10"></rect></g>
-    <g class="TableauTail" deal="ddduuuuu"><rect x="211" y="10"></rect></g>
-    <g class="TableauTail" deal="dddduuuuu"><rect x="278" y="10"></rect></g>
-    <g class="TableauTail" deal="ddddduuuuu"><rect x="345" y="10"></rect></g>
-    <g class="TableauTail" deal="dddddduuuuu"><rect x="412" y="10"></rect></g>
+    <g class="TableauTail" deal="u"><rect x="0" y="0"></rect></g>
+    <g class="TableauTail" deal="duuuuu"><rect x="1" y="0"></rect></g>
+    <g class="TableauTail" deal="dduuuuu"><rect x="2" y="0"></rect></g>
+    <g class="TableauTail" deal="ddduuuuu"><rect x="3" y="0"></rect></g>
+    <g class="TableauTail" deal="dddduuuuu"><rect x="4" y="0"></rect></g>
+    <g class="TableauTail" deal="ddddduuuuu"><rect x="5" y="0"></rect></g>
+    <g class="TableauTail" deal="dddddduuuuu"><rect x="6" y="0"></rect></g>
 
-    <g class="Foundation"><rect x="546" y="10"></rect></g>
-    <g class="Foundation"><rect x="546" y="110"></rect></g>
-    <g class="Foundation"><rect x="546" y="210"></rect></g>
-    <g class="Foundation"><rect x="546" y="310"></rect></g>
+    <g class="Foundation"><rect x="8" y="0"></rect></g>
+    <g class="Foundation"><rect x="8" y="1"></rect></g>
+    <g class="Foundation"><rect x="8" y="2"></rect></g>
+    <g class="Foundation"><rect x="8" y="3"></rect></g>
     <defs>
         <filter id="white-glow" x="-5000%" y="-5000%" width="10000%" height="10000%">
           <feFlood result="flood" flood-color="#ffffff" flood-opacity="1"></feFlood>
@@ -220,7 +220,7 @@
     </div>
     <div class="modal-footer">
       <a class="modal-close btn-small steelblue noselect" onclick="dostarseeddeal()">Deal</a>
-      <a class="modal-close btn-small steelblue noselect" ">Cancel</a>
+      <a class="modal-close btn-small steelblue noselect">Cancel</a>
     </div>
 </div>
 
@@ -231,7 +231,7 @@
       <p id="gamesPlayedStats"></p>
       <p id="gamesStreakStats"></p>
       <p id="gamesTotalStats"></p>
-      <a class="modal-close noselect" onclick="areYouSure('dostatsreset')">reset statistics for this game</a>
+      <a class="modal-close noselect" onclick="areYouSure('window.dostatsreset')">reset statistics for this game</a>
     </div>
 </div>
   
@@ -270,7 +270,7 @@ M.Modal.init(document.querySelectorAll('.modal'));
 M.Tooltip.init(document.querySelectorAll('.tooltipped'));
 </script>
 <!-- <script type="text/javascript" src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script> -->
-<script type="text/javascript" src="Solitaire.js"></script>
+<script type="module" src="./Solitaire.js"></script>
 
 </body>
 </html>
