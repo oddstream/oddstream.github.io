@@ -980,6 +980,24 @@ class CardContainer {
   }
 
   /**
+   * Used when restarting a game; give each CardContainer the chance to clean up
+   */
+  reset() {
+    if ( this.a_accept ) {
+      delete this.a_accept;
+      let oldText = this.g.querySelector('text');
+      if ( oldText ) {
+        this.g.removeChild(oldText);
+      }
+      
+      this.resetAccept();
+      if ( this.a_accept ) {
+        this.createAcceptSVG_();
+      }
+    }
+  }
+
+  /**
    * @private
    * @returns {boolean}
    */
@@ -1929,7 +1947,7 @@ class StockAgnes extends Stock {
   onclick(c) {
     undoPush();
     for ( const r of reserves ) {
-      if ( r.cards.length > 0 ) {
+      if ( this.cards.length > 0 ) {
         moveCards(this, r, 1);
         undoPop();
       }
@@ -3518,6 +3536,8 @@ function restart(seed=undefined) {
       stock.cards = stock.cards.concat(cc.cards);
       cc.cards = /** @type {Card[]} */([]);
     }
+    // TODO reset each container (Duchess a_accept)
+    cc.reset();
   });
   stock.cards.forEach( c => {
     c.owner = stock;
