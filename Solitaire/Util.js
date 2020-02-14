@@ -128,4 +128,50 @@ export const Util = {
     }
   },
 
+  // https://medium.com/@boltmick1/the-simple-math-every-developer-should-know-3f9b25446550
+
+  /**
+   * Linear interpolation. The idea is very simple, you have 2 values, and you want to “walk” between those values by a factor.
+   * If you pass a factor of 0, you are pointing to the beginning of the walk so the value is equal to start.
+   * If you pass a factor of 1, you are pointing to the end of the walk so the value is equal to end.
+   * Any factor between 0 and 1 will add a (1-factor) of start argument and a factor of end argument.
+   * (e.g with start 0 and end 10 with a factor 0.5 you will have a 5, so the half of the path)
+   * 
+   * @param {number} start
+   * @param {number} end
+   * @param {number} factor
+   * @return {number}
+   */
+  lerp : (start, end, factor) => start*(1-factor) + end*factor,
+
+  /**
+   * The opposite of lerp. Instead of a range and a factor, we give a range and a value to find out the factor.
+   * 
+   * @param {number} start
+   * @param {number} end
+   * @param {number} value
+   * @return {number}
+   */
+  normalize : (start, end, value) => (value - start) / (end - start),
+
+  /**
+   * converts a value from the scale [fromMin, fromMax] to a value from the scale[toMin, toMax].
+   * It’s just the normalize and lerp functions working together.
+   * 
+   * @param {number} fromMin
+   * @param {number} fromMax
+   * @param {number} toMin
+   * @param {number} toMax
+   * @param {number} value
+   * @return {number}
+   */
+ mapValue : (value, fromMin, fromMax, toMin, toMax) => Util.lerp(toMin, toMax, Util.normalize(fromMin, fromMax, value)),
+
+  /**
+   * @param {number} value
+   * @param {number} min
+   * @param {number} max
+   * @return {number}
+   */
+  clamp : (value, min, max) => Math.min(Math.max(value, min), max),
 };
