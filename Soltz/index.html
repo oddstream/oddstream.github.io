@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Oddstream Soltz</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123485292-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-123485292-1');
+    </script>
+    <title>Oddstream 2048</title>
     <meta charset="utf-8"/>
-    <meta name='description' content='Solitaire 2048'/>
-    <meta name='keywords' content='Solitaire, 2048, casual, puzzle, game'/>
+    <meta name='description' content='2048'/>
+    <meta name='keywords' content='2048, casual, puzzle, game'/>
     <meta name='author' content='Oddstream Games'/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
@@ -18,10 +26,10 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <link type="text/css" rel="stylesheet" href="Soltz.css" media="screen"/>
+    <link rel="stylesheet" href="Soltz.css" media="screen"/>
   </head>
   <body>
     <svg id="baize" xmlns="http://www.w3.org/2000/svg"></svg>
-    <script type="text/javascript" src="Soltz.js"></script>
+    <script defer type="module" src="Soltz.js"></script>
   </body>
 </html>
