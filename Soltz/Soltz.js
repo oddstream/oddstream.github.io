@@ -1,27 +1,11 @@
 //@ts-check
-'use strict';
 /* jshint esversion:6 */
 
-const Constants = {
-  GAME_NAME: 'Oddstream Soltz',
-  GAME_VERSION: '0.6.21.0',
-  SVG_NAMESPACE: 'http://www.w3.org/2000/svg',
-  LOCALSTORAGE_GAME: 'Oddstream Soltz Game',
-  LOCALSTORAGE_SETTINGS: 'Oddstream Soltz Settings',
-
-  MOBILE:     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-  CHROME:     navigator.userAgent.indexOf('Chrome/') !== -1,   // also Brave, Opera
-  EDGE:       navigator.userAgent.indexOf('Edge/') !== -1,
-  FIREFOX:    navigator.userAgent.indexOf('Firefox/') !== -1,
-
-  GRID_SIZE: 4,
-  GRID_GAP: 100,  // left and top margin
-  CARD_SIZE: 100, // square cards, width == height
-  CARD_GAP: 5,
-  CARD_RADIUS: 5,     // CARD_SIZE / 20
-  BUTTON_WIDTH: 100,  // Constants.CARD_SIZE,
-  BUTTON_HEIGHT: 50,  // Constants.CARD_SIZE / 2,
-}
+import Constants from './Constants.js';
+import Util from './Util.js';
+import AssociationTable from './AssociationTable.js';
+import Button from './Button.js';
+import BigButton from './BigButton.js';
 
 const rectColors = new Map([
   [2, '#eee4da'],
@@ -52,117 +36,6 @@ const valueColors = new Map([
   [2048, '#FDF3F1'],
   [4096, '#FDF3F1'],
 ]);
-
-// https://stackoverflow.com/questions/20368071/touch-through-an-element-in-a-browser-like-pointer-events-none/20387287#20387287
-function dummyTouchHandler(/** @type {Event} */e) {e.preventDefault();}
-
-const Util = {
-  /**
-   * @param {Event} event 
-   * @returns {boolean}
-   */
-  absorbEvent: function(event) {
-    var e = event || window.event;
-    e.preventDefault && e.preventDefault();
-    e.stopPropagation && e.stopPropagation();
-    e.cancelBubble = true;
-    e.returnValue = false;
-    return false;
-  },
-
-  /**
-   * @param {Element} ele 
-   * @param {Object} attribs 
-   */
-  setAttributesNS: function(ele, attribs) {
-    for ( let a in attribs ) {
-      ele.setAttributeNS(null, a, attribs[a]);
-    }
-  },
-}
-
-class AssociationTable {
-  // https://en.wikipedia.org/wiki/Associative_entity
-  constructor() {
-    this.mapPlaceCard = new Map();
-    this.mapCardPlace = new Map();
-  }
-
-  /**
-   * @param {Place} place 
-   * @param {Card} card 
-   */
-  putCard(place, card) {
-    this.mapPlaceCard.set(place, card);
-    this.mapCardPlace.set(card, place);
-  }
-
-  /**
-   * @param {Place} place 
-   */
-  getCard(place) {
-    return this.mapPlaceCard.get(place);
-  }
-
-  /**
-   * @param {Card} card 
-   */
-  getPlace(card) {
-    return this.mapCardPlace.get(card);
-  }
-
-  /**
-   * @param {Place} fromPlace 
-   * @param {Place} toPlace 
-   */
-  moveCard(fromPlace, toPlace) {
-    const card = this.mapPlaceCard.get(fromPlace);
-
-    this.mapPlaceCard.delete(fromPlace);
-    this.mapCardPlace.delete(card);
-    
-    this.mapPlaceCard.set(toPlace, card);
-    this.mapCardPlace.set(card, toPlace);
-  }
-
-  /**
-   * @param {Place} place1 
-   * @param {Place} place2 
-   */
-  swapCards(place1, place2) {
-    const card1 = this.mapPlaceCard.get(place1);
-    const card2 = this.mapPlaceCard.get(place2);
-
-    this.mapPlaceCard.delete(place1);
-    this.mapCardPlace.delete(card1);
-
-    this.mapPlaceCard.delete(place2);
-    this.mapCardPlace.delete(card2);
-
-    this.mapPlaceCard.set(place1, card2);
-    this.mapCardPlace.set(card2, place1);
-
-    this.mapPlaceCard.set(place2, card1);
-    this.mapCardPlace.set(card1, place2);
-  }
-
-  /**
-   * @param {Card} card 
-   */
-  deleteCard(card) {
-    const place = this.mapCardPlace.get(card);
-
-    this.mapPlaceCard.delete(place);
-    this.mapCardPlace.delete(card);
-  }
-
-  reset() {
-    this.mapPlaceCard.clear();
-    this.mapCardPlace.clear();
-  }
-}
-
-const asstab = new AssociationTable();
 
 class Baize {
   constructor() {
@@ -198,7 +71,7 @@ class Baize {
    * @param {number} b positive or negative border width
    */
   adjustBorder_(b) {
-    const nodes = this.ele.querySelectorAll('.place');
+    const nodes = this.ele.querySelectorAll('.tile');
     for ( let n=0; n<nodes.length; n++ ) {
       let r = nodes[n];
       if ( r.hasAttribute('x') ) {
@@ -206,7 +79,7 @@ class Baize {
         r.setAttributeNS(null, 'x', String(x + b));
       }
     }
-    grid.places.forEach( c => {
+    grid.tiles.forEach( c => {
       c.pt.x += b;
     });
 
@@ -215,8 +88,6 @@ class Baize {
     this.btnUndo.adjustBorder(b);
   }
 
-  /**
-   */
   setBox() {
     // console.warn(window.screen.orientation, window.screen.width, window.screen.height);
     this.gutsWidth = Constants.GRID_GAP + (Constants.GRID_SIZE * (Constants.CARD_SIZE + Constants.CARD_GAP)) + Constants.GRID_GAP;
@@ -258,13 +129,13 @@ class Baize {
   }
 
   /**
-   * @param {Place} place 
+   * @param {Tile} tile
    * @param {number} value 
    * @return {Card}
    */
-  createCard(place, value) {
+  createCard(tile, value) {
     const card = new Card(value);
-    asstab.putCard(place, card);
+    asstab.putCard(tile, card);
     this.ele.appendChild(card.g);
     card.position0();
     return card;
@@ -279,9 +150,9 @@ class Baize {
     // the ordinal and suit symbols use css pointer-event: none so the events pass through to their parent (the rect)
     this.ele.addEventListener('pointerdown', this.downHandler);
 
-    this.ele.addEventListener('touchstart', dummyTouchHandler);
-    this.ele.addEventListener('touchmove', dummyTouchHandler);
-    this.ele.addEventListener('touchend', dummyTouchHandler);
+    this.ele.addEventListener('touchstart', Util.dummyTouchHandler);
+    this.ele.addEventListener('touchmove', Util.dummyTouchHandler);
+    this.ele.addEventListener('touchend', Util.dummyTouchHandler);
   }
 
   /**
@@ -375,6 +246,8 @@ class Baize {
       this.ele.appendChild(c.g);
   }
 }
+
+const asstab = new AssociationTable();
 
 class Score {
   /**
@@ -471,215 +344,6 @@ class Score {
    */
   get() {
     return this.score_;
-  }
-}
-
-class Button {
-  /**
-   * @param {object} options 
-   */
-
-  // <g class="button" id="new" transform="translate(10,25)">
-  //   <rect width="100" height="50" rx="10"/>
-  //   <svg width="100" height="50">
-  //     <text class="buttontext" x="50%" y="50%" dominant-baseline="central" text-anchor="middle">New</text>
-  //   </svg>
-  // </g>
-  constructor(options={}) {
-    this.id = options.id || 'button';
-    this.width = options.width || Constants.BUTTON_WIDTH;
-    this.height = options.height || Constants.BUTTON_HEIGHT;
-    this.x = options.x;
-    this.y = options.y;
-    this.command = options.command;
-
-    this.g = document.createElementNS(Constants.SVG_NAMESPACE, 'g');
-    this.g.classList.add('button');
-    Util.setAttributesNS(this.g, {
-      'id': this.id,
-      'transform': `translate(${this.x}, ${this.y})`,
-    });
-
-    this.rect = document.createElementNS(Constants.SVG_NAMESPACE, 'rect');
-    Util.setAttributesNS(this.rect, {
-      'width': this.width,
-      'height': this.height,
-      'rx': String(this.width/20)
-    });
-    this.g.appendChild(this.rect);
-
-    this.svg = document.createElementNS(Constants.SVG_NAMESPACE, 'svg');
-    Util.setAttributesNS(this.svg, {
-      'width': String(Constants.BUTTON_WIDTH),
-      'height': String(Constants.BUTTON_HEIGHT)
-    });
-    this.g.appendChild(this.svg);
-
-    this.text = document.createElementNS(Constants.SVG_NAMESPACE, 'text');
-    this.text.classList.add('buttontext');
-    Util.setAttributesNS(this.text, {
-      'x': '50%',
-      'y': '50%',
-      'dominant-baseline': 'central',
-      'text-anchor': 'middle'
-    });
-    this.text.innerHTML = options.text;
-    this.svg.appendChild(this.text);
-
-    options.parent.appendChild(this.g);
-
-    this.downHandler = this.onpointerdown.bind(this);
-    this.upHandler = this.onpointerup.bind(this);
-    this.cancelHandler = this.onpointercancel.bind(this);
-
-    this.g.addEventListener('pointerdown', this.downHandler);
-    this.g.addEventListener('touchstart', dummyTouchHandler);
-    this.g.addEventListener('touchmove', dummyTouchHandler);
-    this.g.addEventListener('touchend', dummyTouchHandler);
-  }
-
-  /**
-   * @param {number} b positive or negative border width
-   */
-  adjustBorder(b) {
-    this.x += b;
-    Util.setAttributesNS(this.g, {
-      'transform': `translate(${this.x}, ${this.y})`,
-    });
-  }
-
-  /**
-   * @param {PointerEvent} event 
-   * @returns {boolean}
-   */
-  onpointerdown(event) {
-    Util.absorbEvent(event);
-    window.addEventListener('pointerup', this.upHandler);
-    window.addEventListener('pointercancel', this.cancelHandler);
-    return false;
-  }
-
-  /**
-   * @param {PointerEvent} event 
-   * @returns {boolean}
-   */
-  onpointerup(event) {
-    Util.absorbEvent(event);
-    window.removeEventListener('pointerup', this.upHandler);
-    window.removeEventListener('pointercancel', this.cancelHandler);
-
-    const r = this.g.getBoundingClientRect();
-    // console.log('rect', r);
-    // console.log('event client', event.clientX, event.clientY);
-    if ( event.clientX > r.left && event.clientX < r.right ) {
-      if ( event.clientY > r.top && event.clientY < r.bottom ) {
-        document.dispatchEvent(new Event(this.command));
-      }
-    }
-    return false;
-  }
-
-  /**
-   * @param {PointerEvent} event 
-   */
-  onpointercancel(event) {
-    console.log('cancel');
-  }
-
-}
-
-class BigButton {
-  /**
-   * @param {object} options 
-   */
-  constructor(options={}) {
-    this.id = options.id || 'bigbutton';
-    this.width = options.width || 400;
-    this.height = options.height || this.width / 2;
-    this.x = options.x || (baize.width / 2) - (this.width / 2);
-    this.y = options.y || (baize.height / 2) - (this.height / 2);
-    this.command = options.command;
-
-    this.g = document.createElementNS(Constants.SVG_NAMESPACE, 'g');
-    this.g.classList.add('button', 'big');
-    Util.setAttributesNS(this.g, {
-      'id': this.id,
-      'transform': `translate(${this.x}, ${this.y})`,
-    });
-
-    this.rect = document.createElementNS(Constants.SVG_NAMESPACE, 'rect');
-    Util.setAttributesNS(this.rect, {
-      'width': this.width,
-      'height': this.height,
-      'rx': String(this.width / 20)
-    });
-    this.g.appendChild(this.rect);
-
-    this.svg = document.createElementNS(Constants.SVG_NAMESPACE, 'svg');
-    Util.setAttributesNS(this.svg, {
-      'width': this.width,
-      'height': this.height
-    });
-    this.g.appendChild(this.svg);
-
-    this.text = document.createElementNS(Constants.SVG_NAMESPACE, 'text');
-    this.text.classList.add('buttontext', 'big');
-    Util.setAttributesNS(this.text, {
-      'x': '50%',
-      'y': '50%',
-      'dominant-baseline': 'central',
-      'text-anchor': 'middle'
-    });
-    this.text.innerHTML = options.text;
-    this.svg.appendChild(this.text);
-
-    options.parent.appendChild(this.g);
-
-    this.downHandler = this.onpointerdown.bind(this);
-    this.upHandler = this.onpointerup.bind(this);
-    this.cancelHandler = this.onpointercancel.bind(this);
-
-    this.g.addEventListener('pointerdown', this.downHandler);
-    this.g.addEventListener('touchstart', dummyTouchHandler);
-    this.g.addEventListener('touchmove', dummyTouchHandler);
-    this.g.addEventListener('touchend', dummyTouchHandler);
-  }
-  /**
-   * @param {PointerEvent} event 
-   * @returns {boolean}
-   */
-  onpointerdown(event) {
-    Util.absorbEvent(event);
-    window.addEventListener('pointerup', this.upHandler);
-    window.addEventListener('pointercancel', this.cancelHandler);
-    return false;
-  }
-
-  /**
-   * @param {PointerEvent} event 
-   * @returns {boolean}
-   */
-  onpointerup(event) {
-    Util.absorbEvent(event);
-    window.removeEventListener('pointerup', this.upHandler);
-    window.removeEventListener('pointercancel', this.cancelHandler);
-
-    const r = this.g.getBoundingClientRect();
-    // console.log('rect', r);
-    // console.log('event client', event.clientX, event.clientY);
-    if ( event.clientX > r.left && event.clientX < r.right ) {
-      if ( event.clientY > r.top && event.clientY < r.bottom ) {
-        document.dispatchEvent(new Event(this.command));
-      }
-    }
-    return false;
-  }
-
-  /**
-   * @param {PointerEvent} event 
-   */
-  onpointercancel(event) {
-    console.log('cancel');
   }
 }
 
@@ -783,11 +447,11 @@ class Card {
 
   /**
    * Use SVG transform to position this card on the baize
-   * at the place where it's supposed to be
+   * at the tile where it's supposed to be
    */
   position0() {
-    const place = asstab.getPlace(this);
-    this.positionXY(place.pt.x, place.pt.y);
+    const tile = asstab.getTile(this);
+    this.positionXY(tile.pt.x, tile.pt.y);
   }
 
   /**
@@ -800,7 +464,7 @@ class Card {
   }
 
   /**
-   * animate this card to it's place
+   * animate this card to it's tile
    * @param {SVGPoint} ptFrom
    */
   animate(ptFrom) {
@@ -824,8 +488,8 @@ class Card {
 
     baize.elevateCard(this);
 
-    const place = asstab.getPlace(this);
-    const ptTo = {x: place.pt.x, y: place.pt.y};
+    const tile = asstab.getTile(this);
+    const ptTo = {x: tile.pt.x, y: tile.pt.y};
     const N = Math.hypot(ptTo.x - ptFrom.x, ptTo.y - ptFrom.y);  // see 30 seconds of code
     let i = N;
     if ( N ) {
@@ -834,7 +498,7 @@ class Card {
   }
 }
 
-class Place {
+class Tile {
   /**
    * @param {number} x 
    * @param {number} y 
@@ -849,7 +513,7 @@ class Place {
     };
 
     this.rect = document.createElementNS(Constants.SVG_NAMESPACE, 'rect');
-    this.rect.classList.add('place');
+    this.rect.classList.add('tile');
     Util.setAttributesNS(this.rect, {
       x: this.pt.x.toString(),
       y: this.pt.y.toString(),
@@ -875,19 +539,19 @@ class Place {
 
 class Grid {
   constructor() {
-    /** @type {Place[]} */this.places = [];
+    /** @type {Tile[]} */this.tiles = [];
 
     for ( let y=0; y<Constants.GRID_SIZE; y++ ) {
       for ( let x=0; x<Constants.GRID_SIZE; x++ ) {
-        let c = new Place(x, y)
-        this.places.push(c)
+        let c = new Tile(x, y)
+        this.tiles.push(c)
       }
     }
-    this.places.forEach( c => {
-      c.n = this.findPlace(c.x, c.y - 1);
-      c.e = this.findPlace(c.x + 1, c.y);
-      c.s = this.findPlace(c.x, c.y + 1);
-      c.w = this.findPlace(c.x - 1, c.y);
+    this.tiles.forEach( c => {
+      c.n = this.findTile(c.x, c.y - 1);
+      c.e = this.findTile(c.x + 1, c.y);
+      c.s = this.findTile(c.x, c.y + 1);
+      c.w = this.findTile(c.x - 1, c.y);
     });
     this.lastState = null;
   }
@@ -895,42 +559,32 @@ class Grid {
   /**
    * @param {Number} x 
    * @param {Number} y 
-   * @return {Place}
+   * @return {Tile}
    */
-  findPlace(x,y) {
-    return this.places.find(c => {return c.x == x && c.y == y});
+  findTile(x,y) {
+    return this.tiles.find(c => {return c.x == x && c.y == y});
   }
 
   /**
    */
-  randomEmptyPlace() {
-    let emptyPlaces = this.places.filter( pl => !asstab.getCard(pl) );
-    if ( !emptyPlaces.length ) {
+  randomEmptyTile() {
+    let emptyTiles = this.tiles.filter( pl => !asstab.getCard(pl) );
+    if ( !emptyTiles.length ) {
       return null;
     }
-    return emptyPlaces[Math.floor(Math.random()*emptyPlaces.length)];
+    return emptyTiles[Math.floor(Math.random()*emptyTiles.length)];
   }
 
   /**
    * @returns {boolean}
    */
   newRandomCard() {
-    const place = this.randomEmptyPlace();
-    if ( place ) {
-      baize.createCard(place, Math.random() > 0.5 ? 4 : 2).fadeIn();
+    const tile = this.randomEmptyTile();
+    if ( tile ) {
+      baize.createCard(tile, Math.random() > 0.5 ? 4 : 2).fadeIn();
     }
-    return !!place;
+    return !!tile;
   }
-
-  // countCards() {
-  //   let n = 0;
-  //   for ( const place of this.places ) {
-  //     if ( asstab.getCard(place) ) {
-  //       n++;
-  //     }
-  //   }
-  //   return n;
-  // }
 
   /**
    * @returns {boolean}
@@ -939,16 +593,16 @@ class Grid {
     // console.log(this.countCards(), 'cards');
 
     /**
-     * @param {Place} place 
+     * @param {Tile} tile 
      * @param {Card} card 
      * @param {string} dir 
      */
-    function checkNeighbours(place, card, dir) {
-      const neighbourPlace = place[dir];
-      if ( neighbourPlace ) {
-        const neighbourCard = asstab.getCard(neighbourPlace);
+    function checkNeighbours(tile, card, dir) {
+      const neighbourTile = tile[dir];
+      if ( neighbourTile ) {
+        const neighbourCard = asstab.getCard(neighbourTile);
         if ( !neighbourCard ) {
-          // console.log('gameOver: empty neighbour place', dir);
+          // console.log('gameOver: empty neighbour tile', dir);
           return false;
         }
         if ( neighbourCard.value === card.value ) {
@@ -959,25 +613,25 @@ class Grid {
       return true;
     }
 
-    for ( const place of this.places ) {
-      const card = asstab.getCard(place);
+    for ( const tile of this.tiles ) {
+      const card = asstab.getCard(tile);
       if ( !card ) {
-        // console.log('gameOver: empty place');
+        // console.log('gameOver: empty tile');
         return false;
       }
       // can't do ['n','e','s','w'].forEach( dir => {
       // because the return false would be from the forEach function
-      if ( !checkNeighbours(place, card, 'n') )  return false;
-      if ( !checkNeighbours(place, card, 'e') )  return false;
-      if ( !checkNeighbours(place, card, 's') )  return false;
-      if ( !checkNeighbours(place, card, 'w') )  return false;
+      if ( !checkNeighbours(tile, card, 'n') )  return false;
+      if ( !checkNeighbours(tile, card, 'e') )  return false;
+      if ( !checkNeighbours(tile, card, 's') )  return false;
+      if ( !checkNeighbours(tile, card, 'w') )  return false;
     }
     return true;
   }
 
   someCardsInTransit() {
-    for ( const place of this.places ) {
-      const card = asstab.getCard(place);
+    for ( const tile of this.tiles ) {
+      const card = asstab.getCard(tile);
       if ( card && card.animationIds.length > 0 ) {
         // console.log(card.animationIds.length);
         return true;
@@ -1026,7 +680,7 @@ class Grid {
   *sweepNorth() {
     for ( let x=0; x<Constants.GRID_SIZE; x++ ) {
       for ( let y=1; y<Constants.GRID_SIZE; y++ ) {
-        yield this.findPlace(x,y);
+        yield this.findTile(x,y);
       }
     }
   }
@@ -1034,7 +688,7 @@ class Grid {
   *sweepEast() {
     for ( let y=0; y<Constants.GRID_SIZE; y++ ) {
       for ( let x=Constants.GRID_SIZE-2; x>=0; x-- ) {
-        yield this.findPlace(x,y);
+        yield this.findTile(x,y);
       }
     }
   }
@@ -1042,7 +696,7 @@ class Grid {
   *sweepSouth() {
     for ( let x=0; x<Constants.GRID_SIZE; x++ ) {
       for ( let y=Constants.GRID_SIZE-2; y>=0; y-- ) {
-        yield this.findPlace(x,y);
+        yield this.findTile(x,y);
       }
     }
   }
@@ -1050,7 +704,7 @@ class Grid {
   *sweepWest() {
     for ( let y=0; y<Constants.GRID_SIZE; y++ ) {
       for ( let x=1; x<Constants.GRID_SIZE; x++ ) {
-        yield this.findPlace(x,y);
+        yield this.findTile(x,y);
       }
     }
   }
@@ -1062,14 +716,14 @@ class Grid {
    */
   mergeCards(sweepFn, dir) {
     let merged = 0;
-    for ( const oldPlace of sweepFn() ) {
-      const oldCard = asstab.getCard(oldPlace);
+    for ( const oldTile of sweepFn() ) {
+      const oldCard = asstab.getCard(oldTile);
       if ( !oldCard )
         continue;
-      let newPlace = oldPlace[dir];
-      if ( !newPlace )
+      let newTile = oldTile[dir];
+      if ( !newTile )
         continue;
-      let newCard = asstab.getCard(newPlace);
+      let newCard = asstab.getCard(newTile);
       if ( !newCard )
         continue;
       if ( oldCard.value !== newCard.value )
@@ -1078,8 +732,8 @@ class Grid {
 
       newCard.fadeOut();
 
-      asstab.moveCard(oldPlace, newPlace);
-      oldCard.animate(oldPlace.pt);
+      asstab.moveCard(oldTile, newTile);
+      oldCard.animate(oldTile.pt);
 
       oldCard.value *= 2;
       oldCard.updateText_();
@@ -1103,19 +757,19 @@ class Grid {
    */
   packCards(sweepFn, dir) {
     let packed = 0;
-    for ( const oldPlace of sweepFn() ) {
-      const oldCard = asstab.getCard(oldPlace);
+    for ( const oldTile of sweepFn() ) {
+      const oldCard = asstab.getCard(oldTile);
       if ( !oldCard )
         continue;
-      let newPlace = oldPlace;
-      while ( newPlace[dir] ) {
-        if ( asstab.getCard(newPlace[dir]) )
+      let newTile = oldTile;
+      while ( newTile[dir] ) {
+        if ( asstab.getCard(newTile[dir]) )
           break;
-        newPlace = newPlace[dir];
+        newTile = newTile[dir];
       }
-      if ( oldPlace !== newPlace ) {
-        asstab.moveCard(oldPlace, newPlace);
-        oldCard.animate(oldPlace.pt);
+      if ( oldTile !== newTile ) {
+        asstab.moveCard(oldTile, newTile);
+        oldCard.animate(oldTile.pt);
         packed += 1;
       }
     }
@@ -1147,8 +801,8 @@ class Grid {
    */
   getSaveableCards() {
     const arr = [];
-    for ( const place of this.places ) {
-      const o = place.getSaveable();
+    for ( const tile of this.tiles ) {
+      const o = tile.getSaveable();
       if ( o )
         arr.push(o);
     }
@@ -1164,8 +818,8 @@ class Grid {
     score.set(sv.score);
     for ( let i=0; i<sv.cards.length; i++ ) {
       const c = sv.cards[i];
-      const place = this.findPlace(c.x, c.y);
-      baize.createCard(place, c.v);
+      const tile = this.findTile(c.x, c.y);
+      baize.createCard(tile, c.v);
     }
   }
 
@@ -1181,8 +835,8 @@ class Grid {
   undo() {
     if ( !this.lastState )
       return;
-    for ( const place of this.places ) {
-      const card = asstab.getCard(place);
+    for ( const tile of this.tiles ) {
+      const card = asstab.getCard(tile);
       if ( card ) {
         card.destroy();
       }
@@ -1273,7 +927,7 @@ document.addEventListener('moveCards', function(/** @type {CustomEvent} */event)
         command: 'newGame'
       });
     }
-  }, 1000);
+  }, 500);
 });
 
 document.addEventListener('newGame', function(/** {Event} */event) {
