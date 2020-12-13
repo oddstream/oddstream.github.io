@@ -7,9 +7,11 @@
 
 ## Google Play Games
 
+All these games are free, do not have adverts, and do not ask for any spooky permissions.
+
 * [Solitaire](https://play.google.com/store/apps/details?id=com.oddstream.solitaire)
 
-* [Twitty Words](https://play.google.com/store/apps/details?id=com.oddstream.twitty)
+* [Twitty Words (Early Access)](https://play.google.com/store/apps/details?id=com.oddstream.twitty)
 
 * [PIXIE·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.PixieMaze)
 
