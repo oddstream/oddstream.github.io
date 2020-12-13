@@ -2,15 +2,18 @@
 ## Online Games
 
 * [100+ Solitaire Variations](https://oddstream.games/Solitaire/index.html)
+
 * [2048 Clone](https://oddstream.games/Soltz/index.html)
 
 ## Google Play Games
 
 * [Solitaire](https://play.google.com/store/apps/details?id=com.oddstream.solitaire)
 
+* [Twitty Words](https://play.google.com/store/apps/details?id=com.oddstream.twitty)
+
 * [PIXIE·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.PixieMaze)
+
 * [PUCK·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.puckmaze)
-* [PUCK·MAZE·HEX](https://play.google.com/store/apps/details?id=com.oddstream.puckmazehex)
 
 * [Mycelium Loops](https://play.google.com/store/apps/details?id=com.oddstream.mycelium)
 
