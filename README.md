@@ -31,7 +31,7 @@ Yet another "find words in a grid of letters" game, but this one has a Scrabble(
 
 * [PUCK·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.puckmaze)
 
-A modern take on PackMan(tm) designed specifically for a single-tap interface.
+A modern take on Pac-Man(tm) designed specifically for a single-tap interface, with randomly generated levels and evil ghosts.
 
 * [PIXIE·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.PixieMaze)
 
@@ -42,6 +42,10 @@ A vaguely rogue-like take on PUCK·MAZE; explore a series of randomly generated 
 As simple as a game can get, because there are no menus, scores, timers, rewards, or fancy graphics. And yet, it's strangely relaxing and has that "just one more go" vibe to it.
 
 Just tap or spin the shapes to make them line up, then recycle the screen and do it again.
+
+## About oddstream.games
+
+A "proper" programmer with decades of "proper" experience and a cupboard full of two or three awards retired and makes little games for fun, to try to prove that you don't need large teams or people and gigabytes of graphics assets, you just need to hunt down that elusive gameplay.
 
 ## Privacy policy
 
