@@ -27,11 +27,21 @@ Also, the games are authentic, by taking the rules from reputable sources and im
 
 * [Twitty Words (Early Access)](https://play.google.com/store/apps/details?id=com.oddstream.twitty)
 
-* [PIXIE·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.PixieMaze)
+Yet another "find words in a grid of letters" game, but this one has a Scrabble(tm) bias with tile scores and letter distributions that will be familiar to most people. Play against yourself, or the in-game robot, or against the clock.
 
 * [PUCK·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.puckmaze)
 
+A modern take on PackMan(tm) designed specifically for a single-tap interface.
+
+* [PIXIE·MAZE](https://play.google.com/store/apps/details?id=com.oddstream.PixieMaze)
+
+A vaguely rogue-like take on PUCK·MAZE; explore a series of randomly generated levels, collecting useful power-ups and dodging evil ghosts of many colors.
+
 * [Mycelium Loops](https://play.google.com/store/apps/details?id=com.oddstream.mycelium)
+
+As simple as a game can get, because there are no menus, scores, timers, rewards, or fancy graphics. And yet, it's strangely relaxing and has that "just one more go" vibe to it.
+
+Just tap or spin the shapes to make them line up, then recycle the screen and do it again.
 
 ## Privacy policy
 
