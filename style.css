@@ -1,0 +1,13 @@
+body {
+    background-color: moccasin;
+    text-align: center;
+}
+h1, h2 {
+    color: peru;
+    font-family: 'Acme';
+}
+
+p, li {
+    color: darkslateblue;
+    font-family: 'Roboto';
+}
