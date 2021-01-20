@@ -74,7 +74,7 @@ svg {
   touch-action: none;
 }
 
-.place {
+.tile {
   fill: var(--bg-color, Moccasin);
   stroke: white;
   stroke-width: 1;
