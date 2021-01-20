@@ -520,7 +520,7 @@ class Tile {
       height: String(Constants.CARD_SIZE),
       width: String(Constants.CARD_SIZE),
       rx: String(Constants.CARD_RADIUS),
-      ry: String(Constants.CARD_RADIUS)
+      ry: String(Constants.CARD_RADIUS),
     });
     document.getElementById('baize').appendChild(this.rect);
   }
