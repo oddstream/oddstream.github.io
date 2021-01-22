@@ -2,12 +2,18 @@ body {
     background-color: moccasin;
     text-align: center;
 }
-h1, h2 {
+h1 {
     color: peru;
     font-family: 'Acme';
+    font-size: 36pt;
 }
-
-p, li {
+h2 {
+    color: peru;
+    font-family: 'Acme';
+    font-size: 24pt;
+}
+p {
     color: black;
     font-family: 'Roboto';
+    font-size: 14pt;
 }
